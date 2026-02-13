@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hi Fio 💕 Will you be my Valentine?</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #fff0f5, #ffe4e9);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #222;
+      overflow: hidden;
+      transition: background 0.8s ease;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 90%;
+      position: relative;
+      z-index: 10;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #c2185b;
+      margin: 0 0 2.2rem 0;
+      text-shadow: 0 3px 12px rgba(194, 24, 91, 0.25);
+    }
+
+    .gif {
+      max-width: 340px;
+      border-radius: 22px;
+      box-shadow: 0 14px 44px rgba(0,0,0,0.18);
+      margin-bottom: 2.5rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    button {
+      font-size: 1.4rem;
+      padding: 1.1rem 3.2rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.45s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      font-weight: bold;
+    }
+
+    #yesBtn:hover {
+      background: #ff3366;
+      transform: scale(1.07);
+    }
+
+    #noBtn {
+      background: #eeeeee;
+      color: #444;
+    }
+
+    #noBtn:hover {
+      background: #e0e0e0;
+    }
+
+    /* Success / Yes screen */
+    .success-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #ff9a9e, #fecdd3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      z-index: 100;
+    }
+
+    .success-screen.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .success-text {
+      font-size: 3.2rem;
+      color: #9f1239;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 20px rgba(159,18,57,0.3);
+      animation: bounce 1.8s infinite;
+    }
+
+    .success-gif {
+      max-width: 380px;
+      border-radius: 24px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.22);
+      margin-bottom: 2rem;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-25px) rotate(4deg); }
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      font-size: 2.2rem;
+      pointer-events: none;
+      animation: heartFloat 6s ease-in-out infinite;
+      opacity: 0.75;
+    }
+
+    @keyframes heartFloat {
+      0%   { transform: translateY(100vh) rotate(-10deg); opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(-20vh) rotate(10deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="mainScreen">
+    
+    <img class="gif" src="images/myaowl.gif" alt="cute character">
+
+    <h1>Hi Fio! Will you be my valentine?</h1>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes 💖</button>
+      <button id="noBtn">No 😢</button>
+    </div>
+  </div>
+
+  <!-- Yes → success screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="heart" style="left:10%; animation-delay:0.2s;">💕</div>
+    <div class="heart" style="left:25%; animation-delay:1.1s;">❤️</div>
+    <div class="heart" style="left:40%; animation-delay:0.7s;">💗</div>
+    <div class="heart" style="left:60%; animation-delay:1.8s;">💖</div>
+    <div class="heart" style="left:75%; animation-delay:0.4s;">💘</div>
+    <div class="heart" style="left:90%; animation-delay:1.4s;">💝</div>
+
+    
+    <img class="success-gif" src="images/bugcat.gif" alt="happy moment">
+
+    <div class="success-text">YIIPPEEEE!! Knew you would say yes :PP</div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const mainScreen = document.getElementById('mainScreen');
+    const successScreen = document.getElementById('successScreen');
+
+    const noMessages = [
+      "Are u sure?",
+      "Sure na sure??",
+      "100%???",
+      "Pretty pleaseee?",
+      "You can think about it more if you want :)",
+      "If you say no, I will be so sad...",
+      "Like veryy sad 😢"
+    ];
+
+    let noCount = 0;
+
+    // No button logic
+    noBtn.addEventListener('click', () => {
+      noCount++;
+
+      // Update No button text
+      if (noCount <= noMessages.length) {
+        noBtn.textContent = noMessages[noCount - 1];
+      } else {
+        noBtn.textContent = "Okay... :(";
+      }
+
+      // Grow Yes button
+      const scale = 1 + noCount * 0.42;
+      const padding = `${1.1 + noCount * 0.45}rem ${3.2 + noCount * 1.1}rem`;
+      const fontSize = `${1.4 + noCount * 0.32}rem`;
+
+      yesBtn.style.transform = `scale(${scale})`;
+      yesBtn.style.padding = padding;
+      yesBtn.style.fontSize = fontSize;
+
+      // After 7+ clicks → full screen takeover
+      if (noCount >= 4) {
+        yesBtn.style.position = 'fixed';
+        yesBtn.style.inset = '0';
+        yesBtn.style.width = '100vw';
+        yesBtn.style.height = '100vh';
+        yesBtn.style.borderRadius = '0';
+        yesBtn.style.fontSize = '4.8rem';
+        yesBtn.style.zIndex = '9999';
+        yesBtn.textContent = "I BEG PLEASEEEE! 💕";
+        noBtn.style.display = 'none';
+      }
+    });
+
+    // Yes button → show success screen with animation
+    yesBtn.addEventListener('click', () => {
+      mainScreen.style.opacity = '0';
+      setTimeout(() => {
+        mainScreen.style.display = 'none';
+        successScreen.classList.add('show');
+      }, 600);
+    });
+  </script>
+
+</body>
+</html>
